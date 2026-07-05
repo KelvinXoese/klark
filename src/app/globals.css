@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-klark-white text-klark-black antialiased;
+  }
+
+  ::selection {
+    @apply bg-klark-black text-klark-white;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-5 sm:px-8 lg:px-16 xl:px-24;
+  }
+
+  .section-spacing {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+
+  .heading-display {
+    @apply font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight leading-[1.1];
+  }
+
+  .heading-section {
+    @apply font-serif text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight;
+  }
+
+  .body-large {
+    @apply font-sans text-base sm:text-lg text-klark-grey leading-relaxed;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-3.5 bg-klark-black text-klark-white font-sans text-sm tracking-widest uppercase transition-all duration-300 hover:bg-klark-grey;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-3.5 border border-klark-black text-klark-black font-sans text-sm tracking-widest uppercase transition-all duration-300 hover:bg-klark-black hover:text-klark-white;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center font-sans text-sm tracking-widest uppercase text-klark-black transition-opacity duration-300 hover:opacity-60;
+  }
+}
