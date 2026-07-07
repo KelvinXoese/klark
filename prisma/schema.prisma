@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Product
+// Category/size/payment/status are kept as plain strings (not Postgres enums)
+// so they stay a 1:1 match with the string-literal union types already used
+// across the frontend (src/lib/types.ts) — no mapping layer needed.
+// ---------------------------------------------------------------------------
+model Product {
+  id                    String   @id @default(cuid())
+  slug                  String   @unique
+  name                  String
+  category              String // "henleys" | "ringer-tees" | "polos"
+  price                 Decimal  @db.Decimal(10, 2)
+  compareAtPrice        Decimal? @db.Decimal(10, 2) // original price when on sale; null = no discount
+  promoTag              String? // e.g. "Limited Time", "New", "Bundle Deal"
+  currency              String   @default("GHS")
+  description           String
+  fabric                String
+  fit                   String
+  care                  String
+  delivery              String
+  sizes                 String[] // ProductSize values, e.g. ["S","M","L"]
+  colors                Json // [{ name: string, hex: string }]
+  imagePlaceholder      String
+  hoverImagePlaceholder String
+  galleryPlaceholders   String[]
+  featured              Boolean  @default(false)
+  inStock               Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+model Order {
+  id            String   @id @default(cuid())
+  orderNumber   String   @unique
+  status        String   @default("pending") // pending | confirmed | processing | shipped | delivered
+  fullName      String
+  phone         String
+  email         String?
+  address       String
+  paymentMethod String // "mobile-money" | "card"
+  subtotal      Decimal  @db.Decimal(10, 2)
+  deliveryFee   Decimal  @db.Decimal(10, 2)
+  total         Decimal  @db.Decimal(10, 2)
+  currency      String   @default("GHS")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id               String  @id @default(cuid())
+  order            Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId          String
+  product          Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productId        String?
+  slug             String
+  name             String
+  price            Decimal @db.Decimal(10, 2)
+  size             String
+  color            String
+  quantity         Int
+  imagePlaceholder String
+
+  @@map("order_items")
+}
