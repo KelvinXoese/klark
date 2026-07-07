@@ -111,10 +111,10 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="mailto:hello@klark.com"
+                    href="mailto:everythingklark@gmail.com"
                     className="font-sans text-sm text-klark-grey-light hover:text-klark-white transition-colors duration-300"
                   >
-                    hello@klark.com
+                    everythingklark@gmail.com
                   </a>
                 </li>
               </ul>
